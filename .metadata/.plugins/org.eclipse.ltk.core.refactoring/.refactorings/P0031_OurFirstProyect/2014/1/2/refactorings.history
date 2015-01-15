@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Change Layout" description="Change Layout" file="/P0031_OurFirstProyect/res/layout/main.xml" flags="6" flatten="true" id="com.android.ide.eclipse.adt.refactoring.convert" proj="/P0031_OurFirstProyect" sel-end="509" sel-start="0" stamp="1389380075610" type="android.widget.LinearLayout"/>&#x0A;<refactoring comment="Change Layout" description="Change Layout" file="/P0031_OurFirstProyect/res/layout/main.xml" flags="6" flatten="true" id="com.android.ide.eclipse.adt.refactoring.convert" proj="/P0031_OurFirstProyect" sel-end="578" sel-start="0" stamp="1389380120345" type="android.widget.RelativeLayout"/>
+</session>

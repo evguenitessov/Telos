@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.example.pruebagym.R.layout"/>
+<fullyQualifiedTypeName name="com.example.probando.R"/>
+<fullyQualifiedTypeName name="android.os.Bundle"/>
+<fullyQualifiedTypeName name="com.example.gym.R.layout"/>
+<fullyQualifiedTypeName name="ru.startandroid.prob1.R.layout"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="ru.startandroid.mapitas.HttpConnection"/>
+<fullyQualifiedTypeName name="java.lang.Object"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="android.R.string"/>
+<fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLng"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="android.location.Address"/>
+</qualifiedTypeNameHistroy>

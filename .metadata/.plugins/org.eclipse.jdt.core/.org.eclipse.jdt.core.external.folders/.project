@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>.org.eclipse.jdt.core.external.folders</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.link0</name>
+			<type>2</type>
+			<location>C:/Evgueni/Aprendiendo Android/adt-bundle-windows-x86_64-20131030/adt-bundle-windows-x86_64-20131030/sdk/sources/android-19</location>
+		</link>
+		<link>
+			<name>.link1</name>
+			<type>2</type>
+			<location>C:/Evgueni/Aprendiendo Android/adt-bundle-windows-x86_64-20131030/adt-bundle-windows-x86_64-20131030/sdk/sources/android-18</location>
+		</link>
+		<link>
+			<name>.link4</name>
+			<type>2</type>
+			<location>C:/Evgueni/Aprendiendo Android/adt-bundle-windows-x86_64-20131030/adt-bundle-windows-x86_64-20131030/sdk/sources/android-14</location>
+		</link>
+		<link>
+			<name>.link6</name>
+			<type>2</type>
+			<location>C:/Evgueni/Aprendiendo Android/adt-bundle-windows-x86_64-20131030/adt-bundle-windows-x86_64-20131030/sdk/sources/android-16</location>
+		</link>
+	</linkedResources>
+</projectDescription>
