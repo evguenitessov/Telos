@@ -29,23 +29,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import ru.startandroid.mapex.HttpConnection;
+import ru.startandroid.mapex.PathGoogleMapActivity.ParserTask;
+import ru.startandroid.mapex.PathGoogleMapActivity.ReadTask;
 
 public class PathGoogleMapActivity extends FragmentActivity {
 
-//	private static final LatLng LOWER_MANHATTAN = new LatLng(-34.63084231312819,-58.47995035350323);
-//	private static final LatLng BROOKLYN_BRIDGE = new LatLng(-34.63056009206319, -58.47881443798543);
-//	private static final LatLng WALL_STREET = new LatLng(-34.629643625639844, -58.479307293891914);
-	
-	private static final LatLng LOWER_MANHATTAN = new LatLng(-34.63084231312819,-58.47995035350323);	
-	private static final LatLng WALL_STREET = new LatLng(-34.63883238482591, -58.52886848151683);
-	
-//	private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543,-73.998585);
-//	private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
-//	private static final LatLng WALL_STREET = new LatLng(40.7064, -74.0094);
+private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543,
+			-73.998585);
+	private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
+	private static final LatLng WALL_STREET = new LatLng(40.7064, -74.0094);
 
 	GoogleMap googleMap;
 	final String TAG = "PathGoogleMapActivity";
-	private LocationManager locationManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,143 +53,24 @@ public class PathGoogleMapActivity extends FragmentActivity {
 
 		MarkerOptions options = new MarkerOptions();
 		options.position(LOWER_MANHATTAN);
-		//options.position(BROOKLYN_BRIDGE);
+		options.position(BROOKLYN_BRIDGE);
 		options.position(WALL_STREET);
-		//googleMap.addMarker(options);
+		googleMap.addMarker(options);
 		String url = getMapsApiDirectionsUrl();
 		ReadTask downloadTask = new ReadTask();
 		downloadTask.execute(url);
 
-		googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOWER_MANHATTAN,
-				15));
-		addMarkers();				
-		
-		List<Address> fromLocationName = new ArrayList<Address>();
-		Geocoder geocoder = new Geocoder(this);
-		try {
-			fromLocationName = geocoder.getFromLocationName("Rivadavia 1000", 20);
-			options.position(new LatLng(fromLocationName.get(0).getLatitude(), fromLocationName.get(0).getLongitude()));			
-			init();			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		googleMap.addMarker(options);
-		
-		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		
-		//holash
+		googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BROOKLYN_BRIDGE,
+				13));
+		addMarkers();
 
 	}
-	
-	@Override
-	  protected void onResume() {
-	    super.onResume();
-	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-	        1000, 10, locationListener);
-//	    locationManager.requestLocationUpdates(
-//	        LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
-//	        locationListener);
-	    checkEnabled();
-	  }
-
-	  @Override
-	  protected void onPause() {
-	    super.onPause();
-	    locationManager.removeUpdates(locationListener);
-	  }
-	  
-	  private LocationListener locationListener = new LocationListener() {
-
-		    @Override
-		    public void onLocationChanged(Location location) {
-		      //showLocation(location);
-		    }
-
-		    @Override
-		    public void onProviderDisabled(String provider) {
-		      checkEnabled();
-		    }
-
-		    @Override
-		    public void onProviderEnabled(String provider) {
-		      checkEnabled();
-		      showLocation(locationManager.getLastKnownLocation(provider));
-		    }
-
-		    @Override
-		    public void onStatusChanged(String provider, int status, Bundle extras) {
-		      /*if (provider.equals(LocationManager.GPS_PROVIDER)) {
-		        tvStatusGPS.setText("Status: " + String.valueOf(status));
-		      } else if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
-		        tvStatusNet.setText("Status: " + String.valueOf(status));
-		      }*/
-		    }
-		  };
-
-	  private void showLocation(Location location) {
-		    if (location == null)
-		      return;
-		    if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-		      //tvLocationGPS.setText(formatLocation(location));
-		    	googleMap.addMarker(new MarkerOptions()
-		        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-		        .title("Hello world"));
-		    } else if (location.getProvider().equals(
-		        LocationManager.NETWORK_PROVIDER)) {
-		      //tvLocationNet.setText(formatLocation(location));
-		    }
-		  }
-
-	  private String formatLocation(Location location) {
-		    if (location == null)
-		      return "";
-		    return String.format(
-		        "Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT",
-		        location.getLatitude(), location.getLongitude(), new Date(
-		            location.getTime()));
-		  }
-
-	  private void checkEnabled() {
-		    /*tvEnabledGPS.setText("Enabled: "
-		        + locationManager
-		            .isProviderEnabled(LocationManager.GPS_PROVIDER));
-		    tvEnabledNet.setText("Enabled: "
-		        + locationManager
-		            .isProviderEnabled(LocationManager.NETWORK_PROVIDER));*/
-		  }
-	
-	private void init() {
-		  googleMap.setOnMapClickListener(new OnMapClickListener() {
-		      
-		      @Override
-		      public void onMapClick(LatLng latLng) {
-		        Log.d(TAG, "onMapClick: " + latLng.latitude + "," + latLng.longitude);	        
-		      }
-		    });
-		      
-		      googleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
-		      
-		      @Override
-		      public void onMapLongClick(LatLng latLng) {
-		        Log.d(TAG, "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
-		      }
-		    });
-		      
-		      googleMap.setOnCameraChangeListener(new OnCameraChangeListener() {
-		      
-		      @Override
-		      public void onCameraChange(CameraPosition camera) {
-		        Log.d(TAG, "onCameraChange: " + camera.target.latitude + "," + camera.target.longitude);
-		      }
-		    });
-	    }
 
 	private String getMapsApiDirectionsUrl() {
 		String waypoints = "waypoints=optimize:true|"
 				+ LOWER_MANHATTAN.latitude + "," + LOWER_MANHATTAN.longitude
-				+ "|" + "|" + WALL_STREET.latitude + ","
+				+ "|" + "|" + BROOKLYN_BRIDGE.latitude + ","
+				+ BROOKLYN_BRIDGE.longitude + "|" + WALL_STREET.latitude + ","
 				+ WALL_STREET.longitude;
 
 		String sensor = "sensor=false";
@@ -205,7 +82,9 @@ public class PathGoogleMapActivity extends FragmentActivity {
 	}
 
 	private void addMarkers() {
-		if (googleMap != null) {			
+		if (googleMap != null) {
+			googleMap.addMarker(new MarkerOptions().position(BROOKLYN_BRIDGE)
+					.title("First Point"));
 			googleMap.addMarker(new MarkerOptions().position(LOWER_MANHATTAN)
 					.title("Second Point"));
 			googleMap.addMarker(new MarkerOptions().position(WALL_STREET)
@@ -213,7 +92,7 @@ public class PathGoogleMapActivity extends FragmentActivity {
 		}
 	}
 
-	private class ReadTask extends AsyncTask<String, Void, String> {
+	public class ReadTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... url) {
 			String data = "";
@@ -233,7 +112,7 @@ public class PathGoogleMapActivity extends FragmentActivity {
 		}
 	}
 
-	private class ParserTask extends
+	public class ParserTask extends
 			AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
 		@Override

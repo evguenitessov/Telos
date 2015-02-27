@@ -1,0 +1,5 @@
+package ru.startandroid.mapinc;
+
+public class PathJSONParser {
+
+}

@@ -1,0 +1,54 @@
+package ru.startandroid.mapinc;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import ru.startandroid.mapinc.HttpConnection;
+import ru.startandroid.mapinc.PathJSONParser;
+import ru.startandroid.mapinc.PathGoogleMapActivity.ParserTask;
+import ru.startandroid.mapinc.PathGoogleMapActivity.ReadTask;
+
+public class PathGoogleMapActivity extends FragmentActivity {
+
+	SupportMapFragment mapFragment;
+  GoogleMap map;
+  final String TAG = "myLogs";
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main);
+
+    mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        .findFragmentById(R.id.map);
+    map = mapFragment.getMap();
+    if (map == null) {
+      finish();
+      return;
+    }
+    init();
+  }
+
+  private void init() {
+    }
+
+
+  public void onClickTest(View view) {
+    map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+  }
+}

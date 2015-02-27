@@ -6,7 +6,6 @@
 <fullyQualifiedTypeName name="com.example.gym.R.layout"/>
 <fullyQualifiedTypeName name="ru.startandroid.prob1.R.layout"/>
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="ru.startandroid.mapitas.HttpConnection"/>
 <fullyQualifiedTypeName name="java.lang.Object"/>
 <fullyQualifiedTypeName name="java.util.List"/>
@@ -15,4 +14,5 @@
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLng"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="android.location.Address"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
 </qualifiedTypeNameHistroy>

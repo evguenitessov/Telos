@@ -1,0 +1,6 @@
+<resources>
+
+    <string name="app_name">mapinc</string>
+    <string name="title_activity_path_google_map">PathGoogleMapActivity</string>
+
+</resources>

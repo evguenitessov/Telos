@@ -1,0 +1,214 @@
+package ru.startandroid.mapinc;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import ru.startandroid.mapinc.HttpConnection;
+import ru.startandroid.mapinc.PathJSONParser;
+import ru.startandroid.mapinc.PathGoogleMapActivity.ParserTask;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.View;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class PathGoogleMapActivity extends FragmentActivity {
+
+	SupportMapFragment mapFragment;
+	GoogleMap map;
+	final String TAG = "myLogs";
+	private static final LatLng MI_CASITA = new LatLng(-34.63084231312819,-58.47995035350323);
+	private static final LatLng DESTINO = new LatLng(-34.63883238482591, -58.52886848151683);
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_path_google_map);
+
+    //Obtengo el fragmento del Activity
+    mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        .findFragmentById(R.id.map);
+    
+    //Obtengo el objeto "map" del fragmento anterior
+    map = mapFragment.getMap();
+    if (map == null) {
+      finish();
+      return;
+    }
+    
+    //Agrego las acciones que pasan cuando hago click en el mapa
+    init();
+    
+    //Agrego el marker de mi casa
+    /*map.addMarker(new MarkerOptions()
+    .position(MI_CASITA)
+    .title("Hello world"));*/
+    
+    //Muevo la camara a mi casa
+    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
+    
+    MarkerOptions options = new MarkerOptions();    
+	options.position(MI_CASITA);
+	options.position(DESTINO);	
+	map.addMarker(options);
+	
+	String url = getMapsApiDirectionsUrl();
+	ReadTask downloadTask = new ReadTask();
+	downloadTask.execute(url);
+	
+	addMarkers();
+	
+	map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
+  }
+
+  private void init() {
+      map.setOnMapClickListener(new OnMapClickListener() {
+      
+      @Override
+      public void onMapClick(LatLng latLng) {
+        Log.d(TAG, "onMapClick: " + latLng.latitude + "," + latLng.longitude);
+      }
+    });
+      
+      map.setOnMapLongClickListener(new OnMapLongClickListener() {
+      
+      @Override
+      public void onMapLongClick(LatLng latLng) {
+        Log.d(TAG, "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+      }
+    });
+      
+      map.setOnCameraChangeListener(new OnCameraChangeListener() {
+      
+      @Override
+      public void onCameraChange(CameraPosition camera) {
+        Log.d(TAG, "onCameraChange: " + camera.target.latitude + "," + camera.target.longitude);
+      }
+    });
+    }
+
+  private void addMarkers() {
+		if (map != null) {
+			map.addMarker(new MarkerOptions().position(MI_CASITA)
+					.title("First Point"));
+			map.addMarker(new MarkerOptions().position(DESTINO)
+					.title("Second Point"));			
+		}
+	}
+  
+  public void onClickTest(View view) {	  
+	  //Seteo el tipo de mapa
+	  //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+	  
+	  //Agrego un marker al mapa para probar
+	  /*map.addMarker(new MarkerOptions()
+      .position(new LatLng(0, 0))
+      .title("Hello world"));*/
+  }
+  
+
+  private String getMapsApiDirectionsUrl() {
+	String waypoints = "waypoints=optimize:true|"
+			+ MI_CASITA.latitude + "," + MI_CASITA.longitude
+			+ "|" + "|" + DESTINO.latitude + ","
+			+ DESTINO.longitude;
+
+	String sensor = "sensor=false";
+	String originDestiny = "origin=" + MI_CASITA.latitude + "," + MI_CASITA.longitude + "&" + "destination=" + DESTINO.latitude + "," + DESTINO.longitude;
+	String params = waypoints + "&" + sensor;
+	String output = "json";	
+	String url = "https://maps.googleapis.com/maps/api/directions/"
+			+ output + "?" + params;
+	//https://maps.googleapis.com/maps/api/directions/json?origin=52.28582710000001,-1.1141665&destination=52.2777244,-1.1581097&waypoints=optimize:true|-34.63084231312819,-58.47995035350323||-34.63883238482591,-58.52886848151683&sensor=false
+	return url;
+}
+  
+  public class ReadTask extends AsyncTask<String, Void, String> {
+	@Override
+	protected String doInBackground(String... url) {
+		String data = "";
+		try {
+			HttpConnection http = new HttpConnection();
+			data = http.readUrl(url[0]);
+		} catch (Exception e) {
+			Log.d("Background Task", e.toString());
+		}
+		return data;
+	}
+
+	@Override
+	protected void onPostExecute(String result) {
+		super.onPostExecute(result);
+		new ParserTask().execute(result);
+	}
+}
+
+  public class ParserTask extends
+		AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+	@Override
+	protected List<List<HashMap<String, String>>> doInBackground(
+			String... jsonData) {
+
+		JSONObject jObject;
+		List<List<HashMap<String, String>>> routes = null;
+
+		try {
+			jObject = new JSONObject(jsonData[0]);
+			PathJSONParser parser = new PathJSONParser();
+			routes = parser.parse(jObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return routes;
+	}
+
+	@Override
+	protected void onPostExecute(List<List<HashMap<String, String>>> routes) {
+		ArrayList<LatLng> points = null;
+		PolylineOptions polyLineOptions = null;
+
+		// traversing through routes
+		for (int i = 0; i < routes.size(); i++) {
+			points = new ArrayList<LatLng>();
+			polyLineOptions = new PolylineOptions();
+			List<HashMap<String, String>> path = routes.get(i);
+
+			for (int j = 0; j < path.size(); j++) {
+				HashMap<String, String> point = path.get(j);
+
+				double lat = Double.parseDouble(point.get("lat"));
+				double lng = Double.parseDouble(point.get("lng"));
+				LatLng position = new LatLng(lat, lng);
+
+				points.add(position);
+			}
+
+			polyLineOptions.addAll(points);
+			polyLineOptions.width(2);
+			polyLineOptions.color(Color.BLUE);
+		}
+
+		map.addPolyline(polyLineOptions);
+	}
+}
+}
+
+
+
+
