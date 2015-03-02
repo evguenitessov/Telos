@@ -2,14 +2,19 @@ package ru.startandroid.mapinc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +39,8 @@ public class PathGoogleMapActivity extends FragmentActivity {
 	SupportMapFragment mapFragment;
 	GoogleMap map;
 	final String TAG = "myLogs";
+	private LocationManager locationManager;
+	
 	private static final LatLng MI_CASITA = new LatLng(-34.63084231312819,-58.47995035350323);
 	private static final LatLng DESTINO = new LatLng(-34.63883238482591, -58.52886848151683);
 	private static final LatLng PARQUE_NORTE = new LatLng(-34.545931355014005, -58.438594713807106);
@@ -89,10 +96,68 @@ public class PathGoogleMapActivity extends FragmentActivity {
 		e.printStackTrace();
 	}
 	
+	//Agrego el manager para el provider de localizacion
+	locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+	
 	//Enfoco la camara a mi casa
 	map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+        0, 10, locationListener);
+    locationManager.requestLocationUpdates(
+        LocationManager.NETWORK_PROVIDER, 0, 10,
+        locationListener);    
+  }
+  
+  @Override
+  protected void onPause() {
+    super.onPause();
+    locationManager.removeUpdates(locationListener);
+  }
+
+  private LocationListener locationListener = new LocationListener() {
+
+    @Override
+    public void onLocationChanged(Location location) {
+      showLocation(location);
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {      
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {      
+      showLocation(locationManager.getLastKnownLocation(provider));
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {      
+    }
+  };
+
+  private void showLocation(Location location) {
+    if (location == null)
+      return;
+    if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+    	map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()))
+				.title("Direccion casa"));		
+    } else if (location.getProvider().equals(
+        LocationManager.NETWORK_PROVIDER)) {
+    	map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()))
+				.title("Direccion casa"));		
+    }
+  }    
+
+  public void onClickLocationSettings(View view) {
+    startActivity(new Intent(
+        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+  };
+  
   private void init() {
       map.setOnMapClickListener(new OnMapClickListener() {
       

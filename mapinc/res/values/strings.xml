@@ -3,5 +3,6 @@
     <string name="app_name">mapinc</string>
     <string name="title_activity_path_google_map">Mapinc</string>
     <string name="test">Test</string>
+    <string name="location_settings">Location settings</string>
 
 </resources>
