@@ -13,6 +13,6 @@
 <fullyQualifiedTypeName name="android.R.string"/>
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLng"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
-<fullyQualifiedTypeName name="android.location.Address"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="android.location.Address"/>
 </qualifiedTypeNameHistroy>
