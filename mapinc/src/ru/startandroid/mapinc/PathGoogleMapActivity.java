@@ -1,15 +1,15 @@
 package ru.startandroid.mapinc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONObject;
 
-import ru.startandroid.mapinc.HttpConnection;
-import ru.startandroid.mapinc.PathJSONParser;
-import ru.startandroid.mapinc.PathGoogleMapActivity.ParserTask;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -56,27 +56,40 @@ public class PathGoogleMapActivity extends FragmentActivity {
     }
     
     //Agrego las acciones que pasan cuando hago click en el mapa
-    init();
+    init();    
     
-    //Agrego el marker de mi casa
-    /*map.addMarker(new MarkerOptions()
-    .position(MI_CASITA)
-    .title("Hello world"));*/
-    
-    //Muevo la camara a mi casa
-    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
-    
+    //Agrego los puntos de "origen" y "destino" al mapa
     MarkerOptions options = new MarkerOptions();    
 	options.position(MI_CASITA);
 	options.position(PARQUE_NORTE);	
 	map.addMarker(options);
 	
+	//Dibujo el trayecto desde el origen hasta destino en el mapa
 	String url = getMapsApiDirectionsUrl();
 	ReadTask downloadTask = new ReadTask();
 	downloadTask.execute(url);
 	
+	//Agrego los makers de origen y destino al mapa
 	addMarkers();
 	
+	//Busco y agrego maker en base a una direccion
+	List<Address> fromLocationName = new ArrayList<Address>();
+	Geocoder geocoder = new Geocoder(this);
+	try {
+		fromLocationName = geocoder.getFromLocationName("Rivadavia 8000", 20);
+		for (Address address : fromLocationName) {			
+			if((address.getSubLocality() != null) && (address.getSubLocality().toLowerCase().equals("floresta"))) {				
+				map.addMarker(new MarkerOptions().position(new LatLng(address.getLatitude(), address.getLongitude()))
+						.title("Direccion de prueba"));				
+			}				
+		}
+										
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	//Enfoco la camara a mi casa
 	map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
   }
 
