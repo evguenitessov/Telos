@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="debug">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/OhYeah/app/build/intermediates/pre-dexed/debug/classes-8742fdc8f79b8f983d30c56ce226dfb1d8d5d5c6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/OhYeah/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-1bb710033c5e15cd8d94ac842f4d13dc30ae54ba.jar!/" />
+      <root url="jar://$PROJECT_DIR$/OhYeah/app/build/intermediates/pre-dexed/debug/classes-c2c6f18771229f16a2c3eb3d4efc65347bc21ab6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/OhYeah/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-6adbb672dacc6ab4d4fc34430bb9e492661b7137.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

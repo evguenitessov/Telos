@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OhYeah"
+    android:background="#ffffffff"
+    android:clickable="false">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="#ffff6666"
+        android:id="@+id/relativeLayout"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoinvdescripcion"
+            android:src="@drawable/logoinvertido"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/botonatrasdescripcion"
+            android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha"
+            android:background="#ffff6666"
+            android:layout_alignBottom="@+id/logoinvdescripcion" />
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:smoothScrollbar="false"
+        android:stackFromBottom="false"
+        android:alwaysDrawnWithCache="false"
+        android:drawSelectorOnTop="false"
+        android:fadeScrollbars="false"
+        android:divider="#4dff6666"
+        android:dividerHeight="1dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:scrollingCache="false"
+        android:nestedScrollingEnabled="false" />
+
+</RelativeLayout>
