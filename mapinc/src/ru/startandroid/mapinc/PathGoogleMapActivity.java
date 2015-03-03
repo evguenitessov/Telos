@@ -31,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -38,13 +39,16 @@ public class PathGoogleMapActivity extends FragmentActivity {
 
 	SupportMapFragment mapFragment;
 	GoogleMap map;
+	Marker marker;
 	final String TAG = "myLogs";
 	private LocationManager locationManager;
 	
-	private static final LatLng MI_CASITA = new LatLng(-34.63084231312819,-58.47995035350323);
+	private static final LatLng MI_CASITA = new LatLng(-34.63117694937363,-58.478600196540356);
 	private static final LatLng DESTINO = new LatLng(-34.63883238482591, -58.52886848151683);
 	private static final LatLng PARQUE_NORTE = new LatLng(-34.545931355014005, -58.438594713807106);
 	private static final LatLng PUERTO_MADERO = new LatLng(-34.59999398119388, -58.36435686796904);
+	private static final LatLng P1 = new LatLng(-34.63074548078885, -58.469833731651306);
+	private static final LatLng P2 = new LatLng(-34.63251934303525, -58.476584851741784);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,10 @@ public class PathGoogleMapActivity extends FragmentActivity {
 	//Agrego el manager para el provider de localizacion
 	locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 	
+	//Calculo la distancia		
+	float[] currentDistance = new float[1];	
+    Location.distanceBetween(MI_CASITA.latitude, MI_CASITA.longitude, PARQUE_NORTE.latitude, PARQUE_NORTE.longitude, currentDistance);
+	
 	//Enfoco la camara a mi casa
 	map.moveCamera(CameraUpdateFactory.newLatLngZoom(MI_CASITA,13));
   }
@@ -140,11 +148,16 @@ public class PathGoogleMapActivity extends FragmentActivity {
     }
   };
 
+  
   private void showLocation(Location location) {
     if (location == null)
       return;
     if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-    	map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()))
+    	if (marker != null) {
+    		marker.remove();
+		}
+    	
+    	marker = map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()))
 				.title("Direccion casa"));		
     } else if (location.getProvider().equals(
         LocationManager.NETWORK_PROVIDER)) {
